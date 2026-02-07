@@ -1,4 +1,3 @@
-// client/src/pages/Home.jsx
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -20,7 +19,6 @@ const GlobeAsteroid = lazy(() => import('../components/GlobeAsteroid'));
 const Home = () => {
   return (
     <div className="min-h-screen flex flex-col bg-space-950">
-      {/* ================= HERO: left text, right Three.js globe+asteroids ================= */}
       <section className="relative min-h-[100dvh] sm:min-h-[100vh] flex flex-col overflow-hidden bg-noise" id="hero">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 hero-mesh" aria-hidden />
@@ -32,7 +30,6 @@ const Home = () => {
 
         <div className="relative z-10 flex-1 flex flex-col justify-center w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-6 sm:pb-8">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            {/* Left: all text left-aligned */}
             <div className="order-2 lg:order-1 flex flex-col justify-center text-left">
               <p className="landing-label mb-3">Near-Earth Object Monitoring</p>
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/15 text-accent-purple text-sm font-medium mb-6 w-fit">
@@ -81,7 +78,6 @@ const Home = () => {
                 <span>Open data, open source</span>
               </p>
 
-              {/* Stats row: left-aligned under content */}
               <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {[
                   { value: '24/7', label: 'Monitoring' },
@@ -100,9 +96,7 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Right: Three.js globe + asteroids */}
             <div className="order-1 lg:order-2 relative w-full h-[340px] sm:h-[420px] lg:h-[540px]">
-              {/* Glow behind globe */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden>
                 <div className="w-[60%] h-[60%] rounded-full bg-accent-purple/10 blur-[60px]" />
               </div>
@@ -128,7 +122,6 @@ const Home = () => {
         </a>
       </section>
 
-      {/* ================= TRUST STRIP ================= */}
       <section className="relative py-10 border-t border-white/5 bg-grid">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="landing-label mb-6">Built with</p>
@@ -145,7 +138,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= FEATURES ================= */}
       <section className="relative py-16 sm:py-20 md:py-24 lg:py-28 border-t border-white/5" id="features">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16 md:mb-20">
@@ -159,7 +151,6 @@ const Home = () => {
             </p>
           </div>
 
-          {/* Bento: one large + two smaller */}
           <div className="grid md:grid-cols-3 gap-6 mb-6">
             <div className="md:col-span-2 group relative p-8 md:p-10 rounded-2xl glass-card border border-white/10 hover:border-violet-500/30 hover:shadow-[0_0_40px_-12px_rgba(139,92,246,0.15)] transition-all duration-300 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
@@ -214,7 +205,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= DASHBOARD PREVIEW ================= */}
       <section className="relative py-16 sm:py-20 md:py-24 lg:py-28 border-t border-white/5 bg-grid bg-white/[0.01]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-16">
@@ -279,7 +269,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= HOW IT WORKS ================= */}
       <section className="relative py-16 sm:py-20 md:py-24 lg:py-28 border-t border-white/5" id="how-it-works">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16 md:mb-20">
@@ -319,7 +308,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= WHY IT MATTERS ================= */}
       <section className="relative py-16 sm:py-20 md:py-24 lg:py-28 border-t border-white/5 bg-white/[0.01]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="landing-label mb-4">Mission</p>
@@ -344,7 +332,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= CTA ================= */}
       <section className="relative py-20 sm:py-24 md:py-28 lg:py-32 border-t border-white/5 bg-gradient-to-b from-accent-purple/10 via-accent-purple/5 to-transparent overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full bg-accent-purple/20 blur-[120px]" />
@@ -377,7 +364,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= FOOTER ================= */}
       <footer className="mt-auto border-t border-white/[0.08] bg-space-900/95 backdrop-blur-sm bg-gradient-to-b from-transparent to-space-950/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 md:gap-8 mb-10 sm:mb-16">

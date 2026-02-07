@@ -3,13 +3,13 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, useTexture, Float } from '@react-three/drei';
 import * as THREE from 'three';
 
-// ─── High-res textures ───
-const EARTH_MAP   = 'https://unpkg.com/three-globe@2.41.12/example/img/earth-blue-marble.jpg';
-const EARTH_BUMP  = 'https://unpkg.com/three-globe@2.41.12/example/img/earth-topology.png';
-const EARTH_SPEC  = 'https://unpkg.com/three-globe@2.41.12/example/img/earth-water.png';
-const EARTH_NIGHT = 'https://unpkg.com/three-globe@2.41.12/example/img/earth-night.jpg';
 
-// ─── Atmosphere shader ───
+const EARTH_MAP   = 'https://unpkg.com/three-globe@2.31.0/example/img/earth-blue-marble.jpg';
+const EARTH_BUMP  = 'https://unpkg.com/three-globe@2.31.0/example/img/earth-topology.png';
+const EARTH_SPEC  = 'https://unpkg.com/three-globe@2.31.0/example/img/earth-water.png';
+const EARTH_NIGHT = 'https://unpkg.com/three-globe@2.31.0/example/img/earth-night.jpg';
+
+
 const atmosphereVertex = `
   varying vec3 vNormal;
   varying vec3 vPosition;
@@ -30,7 +30,7 @@ const atmosphereFragment = `
   }
 `;
 
-// ─── Earth (textured) ───
+
 function EarthTextured() {
   const earthRef = useRef(null);
   const cloudRef = useRef(null);
@@ -42,7 +42,7 @@ function EarthTextured() {
     emissiveMap: EARTH_NIGHT,
   });
 
-  // Make textures sharper
+  
   Object.values(textures).forEach((tex) => {
     tex.anisotropy = 16;
     tex.colorSpace = THREE.SRGBColorSpace;
@@ -64,7 +64,6 @@ function EarthTextured() {
 
   return (
     <group>
-      {/* Earth core */}
       <mesh ref={earthRef}>
         <sphereGeometry args={[1.4, 128, 128]} />
         <meshPhongMaterial
@@ -80,7 +79,6 @@ function EarthTextured() {
         />
       </mesh>
 
-      {/* Cloud layer */}
       <mesh ref={cloudRef}>
         <sphereGeometry args={[1.425, 64, 64]} />
         <meshPhongMaterial
@@ -96,7 +94,7 @@ function EarthTextured() {
   );
 }
 
-// ─── Fallback Earth (while textures load) ───
+
 function EarthFallback() {
   const ref = useRef(null);
   useFrame((_, delta) => {
@@ -130,7 +128,7 @@ function Earth() {
   );
 }
 
-// ─── Asteroid (high-detail rocky body with craters + dust trail) ───
+
 const ASTEROID_COLORS = [
   { color: '#9e9080', emissive: '#3a2e20' },
   { color: '#7a7268', emissive: '#2a2218' },
@@ -148,7 +146,7 @@ function Asteroid({ orbitRadius, speed, angleOffset, size, yTilt, inclination = 
   const colorIdx = Math.abs(Math.floor(seed)) % ASTEROID_COLORS.length;
   const { color, emissive } = ASTEROID_COLORS[colorIdx];
 
-  // High detail geometry with multi-pass displacement (craters + ridges)
+  
   const geometry = useMemo(() => {
     const detail = size > 0.09 ? 3 : 2;
     const geo = new THREE.IcosahedronGeometry(size, detail);
@@ -159,16 +157,16 @@ function Asteroid({ orbitRadius, speed, angleOffset, size, yTilt, inclination = 
       v.set(pos.getX(i), pos.getY(i), pos.getZ(i));
       const orig = v.length();
 
-      // Large bumps
+      
       const n1 = Math.sin(seed + v.x * 12 + v.y * 8) * Math.cos(seed + v.z * 10 + v.x * 6);
-      // Medium craters
+      
       const n2 = Math.sin(seed * 1.3 + v.x * 25 + v.z * 18) * Math.cos(seed * 0.7 + v.y * 22);
-      // Fine grain
+      
       const n3 = Math.sin(seed * 2.1 + v.y * 40 + v.x * 35) * 0.5;
 
       const displacement = 1 + n1 * 0.18 + n2 * 0.1 + n3 * 0.04;
 
-      // Flatten one axis slightly for non-spherical shape
+      
       const squash = 0.85 + Math.sin(seed) * 0.15;
 
       v.normalize().multiplyScalar(orig * displacement);
@@ -181,7 +179,7 @@ function Asteroid({ orbitRadius, speed, angleOffset, size, yTilt, inclination = 
     return geo;
   }, [size, seed]);
 
-  // Dust trail positions (static ring of particles behind the asteroid)
+  
   const trailGeo = useMemo(() => {
     const count = 20;
     const positions = new Float32Array(count * 3);
@@ -210,7 +208,7 @@ function Asteroid({ orbitRadius, speed, angleOffset, size, yTilt, inclination = 
     meshRef.current.rotation.z += 0.008;
     meshRef.current.rotation.y += 0.005;
 
-    // Update trail particles to scatter behind asteroid
+    
     if (trailRef.current) {
       const tp = trailRef.current.geometry.attributes.position;
       for (let i = 0; i < tp.count; i++) {
@@ -240,7 +238,6 @@ function Asteroid({ orbitRadius, speed, angleOffset, size, yTilt, inclination = 
           flatShading
         />
       </mesh>
-      {/* Dust trail */}
       <points ref={trailRef} geometry={trailGeo}>
         <pointsMaterial
           size={0.015}
@@ -256,7 +253,7 @@ function Asteroid({ orbitRadius, speed, angleOffset, size, yTilt, inclination = 
   );
 }
 
-// ─── Orbit ring (dashed) ───
+
 function OrbitPath({ radius, dashScale = 1 }) {
   const lineGeo = useMemo(() => {
     const pts = [];
@@ -288,7 +285,7 @@ function OrbitPath({ radius, dashScale = 1 }) {
   );
 }
 
-// ─── Star field (varied sizes + twinkling) ───
+
 function Stars() {
   const ref = useRef(null);
   const COUNT = 2500;
@@ -326,7 +323,7 @@ function Stars() {
   );
 }
 
-// ─── Hazard asteroid (larger, fiery, pulsing glow + fire trail) ───
+
 function HazardAsteroid() {
   const meshRef = useRef(null);
   const glowRef = useRef(null);
@@ -369,14 +366,14 @@ function HazardAsteroid() {
     meshRef.current.rotation.x += 0.018;
     meshRef.current.rotation.z += 0.012;
 
-    // Pulsing glow
+    
     if (glowRef.current) {
       glowRef.current.position.set(x, y, z);
       const pulse = 1 + Math.sin(state.clock.elapsedTime * 3) * 0.15;
       glowRef.current.scale.setScalar(pulse);
     }
 
-    // Fire trail
+    
     if (trailRef.current) {
       const tp = trailRef.current.geometry.attributes.position;
       for (let i = 0; i < TRAIL_COUNT; i++) {
@@ -404,7 +401,6 @@ function HazardAsteroid() {
           flatShading
         />
       </mesh>
-      {/* Pulsing glow */}
       <mesh ref={glowRef}>
         <sphereGeometry args={[0.3, 16, 16]} />
         <meshBasicMaterial
@@ -415,7 +411,6 @@ function HazardAsteroid() {
           blending={THREE.AdditiveBlending}
         />
       </mesh>
-      {/* Fire trail */}
       <points ref={trailRef} geometry={trailGeo}>
         <pointsMaterial
           size={0.025}
@@ -431,7 +426,7 @@ function HazardAsteroid() {
   );
 }
 
-// ─── Full scene ───
+
 function Scene() {
   const groupRef = useRef(null);
 
@@ -440,17 +435,17 @@ function Scene() {
   });
 
   const asteroids = useMemo(() => [
-    // Inner ring
+    
     { orbitRadius: 2.3, speed: 0.28,  angleOffset: 0,              size: 0.09,  yTilt: 0.3,   inclination: 0 },
     { orbitRadius: 2.3, speed: 0.28,  angleOffset: Math.PI,        size: 0.07,  yTilt: 0.2,   inclination: 0.5 },
     { orbitRadius: 2.3, speed: 0.28,  angleOffset: Math.PI * 0.66, size: 0.08,  yTilt: -0.25, inclination: 1.0 },
     { orbitRadius: 2.3, speed: 0.28,  angleOffset: Math.PI * 1.4,  size: 0.06,  yTilt: 0.15,  inclination: 1.8 },
-    // Middle ring
+    
     { orbitRadius: 2.9, speed: 0.16,  angleOffset: 0.5,            size: 0.13,  yTilt: 0.5,   inclination: 0.3 },
     { orbitRadius: 2.9, speed: 0.16,  angleOffset: Math.PI + 0.5,  size: 0.08,  yTilt: -0.4,  inclination: 0.8 },
     { orbitRadius: 2.9, speed: 0.16,  angleOffset: Math.PI * 1.3,  size: 0.10,  yTilt: 0.35,  inclination: 1.5 },
     { orbitRadius: 2.9, speed: 0.16,  angleOffset: 3.8,            size: 0.07,  yTilt: -0.3,  inclination: 2.0 },
-    // Outer ring
+    
     { orbitRadius: 3.6, speed: 0.09,  angleOffset: 1.2,            size: 0.15,  yTilt: 0.7,   inclination: 0.2 },
     { orbitRadius: 3.6, speed: 0.09,  angleOffset: Math.PI + 1.2,  size: 0.09,  yTilt: -0.6,  inclination: 1.2 },
     { orbitRadius: 3.6, speed: 0.09,  angleOffset: Math.PI * 0.5,  size: 0.11,  yTilt: 0.45,  inclination: 0.7 },
@@ -459,7 +454,7 @@ function Scene() {
 
   return (
     <>
-      {/* Lighting */}
+    
       <ambientLight intensity={0.08} />
       <directionalLight position={[5, 2, 4]} intensity={1.8} color="#ffffff" />
       <directionalLight position={[-4, 1, -3]} intensity={0.3} color="#334488" />
@@ -495,7 +490,7 @@ function Scene() {
   );
 }
 
-// ─── Export ───
+
 export default function GlobeAsteroid({ className = '' }) {
   return (
     <div className={className} style={{ width: '100%', height: '100%', minHeight: '320px' }}>

@@ -1,4 +1,4 @@
-/* client/src/index.css */
+
 @import "tailwindcss";
 
 @theme {
@@ -22,17 +22,15 @@ body {
   @apply bg-space-950 text-white antialiased;
   font-family: var(--font-body);
   overflow-x: hidden;
-  /* Safe area for notched devices */
   padding-left: env(safe-area-inset-left, 0);
   padding-right: env(safe-area-inset-right, 0);
 }
 
-/* Heading font for titles */
 .font-heading {
   font-family: var(--font-heading);
 }
 
-/* Subtle noise overlay for depth */
+
 .bg-noise::before {
   content: "";
   position: absolute;
@@ -42,7 +40,7 @@ body {
   z-index: 0;
 }
 
-/* Hero gradient orb animation */
+
 @keyframes hero-glow {
   0%, 100% { opacity: 0.4; transform: scale(1); }
   50% { opacity: 0.7; transform: scale(1.05); }
@@ -52,7 +50,7 @@ body {
   animation: hero-glow 8s ease-in-out infinite;
 }
 
-/* Floating stars for hero */
+
 .hero-stars {
   background-image:
     radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.45), transparent),
@@ -66,7 +64,7 @@ body {
   background-repeat: repeat;
 }
 
-/* Section entrance (optional use with animation-delay) */
+
 .section-reveal {
   animation: section-reveal 0.6s ease-out forwards;
 }
@@ -82,7 +80,7 @@ body {
   }
 }
 
-/* Grid overlay for sections */
+
 .bg-grid {
   background-image:
     linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
@@ -90,7 +88,6 @@ body {
   background-size: 60px 60px;
 }
 
-/* Glow line under headline */
 .headline-underline {
   background: linear-gradient(90deg, rgba(139, 92, 246, 0.5), rgba(34, 211, 238, 0.3), transparent);
   height: 3px;
@@ -99,7 +96,6 @@ body {
   margin-top: 0.5rem;
 }
 
-/* Hero left-side animated space image */
 .hero-image-zoom {
   animation: hero-image-zoom 25s ease-in-out infinite;
 }
@@ -118,7 +114,7 @@ body {
   50% { transform: translate(0, -8px); }
 }
 
-/* Subtle rotating glow behind hero image */
+
 .hero-image-glow {
   animation: hero-image-glow 12s ease-in-out infinite;
 }
@@ -128,7 +124,7 @@ body {
   50% { opacity: 0.8; transform: scale(1.08); }
 }
 
-/* Hero background: perspective grid (receding into space) */
+
 .hero-bg-grid {
   background-image:
     linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
@@ -139,7 +135,7 @@ body {
   background-position: center bottom;
 }
 
-/* Hero orbital rings (decorative) */
+
 .hero-orbit {
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 50%;
@@ -161,7 +157,7 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* Hero floating particles */
+
 .hero-particle {
   position: absolute;
   border-radius: 50%;
@@ -190,7 +186,7 @@ body {
   75% { transform: translate(-15px, -10px) scale(1.1); opacity: 0.5; }
 }
 
-/* Hero radial glow (center spot) */
+
 .hero-spotlight {
   background: radial-gradient(
     ellipse 80% 50% at 50% 20%,
@@ -201,7 +197,7 @@ body {
   pointer-events: none;
 }
 
-/* Universe / Earth / Asteroid scene: rotating orbit */
+
 .hero-orbit-rotate {
   animation: hero-orbit-rotate 45s linear infinite;
 }
@@ -211,7 +207,6 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* Optional: dashed orbit stroke moving */
 .hero-orbit-ellipse {
   animation: hero-orbit-dash 20s linear infinite;
 }
@@ -225,7 +220,6 @@ body {
   to { stroke-dashoffset: -100; }
 }
 
-/* Subtle Earth pulse */
 .hero-earth-group {
   transform-origin: 250px 200px;
   animation: hero-earth-pulse 6s ease-in-out infinite;
@@ -236,7 +230,7 @@ body {
   50% { opacity: 0.95; transform: scale(1.02); }
 }
 
-/* Asteroid float */
+
 .hero-asteroid-group {
   animation: hero-asteroid-float 8s ease-in-out infinite;
 }
@@ -254,25 +248,23 @@ body {
   50% { transform: translate(2px, -3px); opacity: 1; }
 }
 
-/* Glass card surface */
+
 .glass-card {
   background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
-/* Soft focus for accessibility */
+
 *:focus-visible {
   outline: 2px solid var(--color-accent-purple);
   outline-offset: 2px;
 }
 
-/* Card hover glow (purple) */
 .card-glow:hover {
   box-shadow: 0 0 32px -8px var(--color-accent-glow);
 }
 
-/* Subtle gradient text */
 .gradient-text {
   background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 50%, #22d3ee 100%);
   -webkit-background-clip: text;
@@ -280,7 +272,6 @@ body {
   background-clip: text;
 }
 
-/* Landing: section eyebrow label */
 .landing-label {
   font-size: 0.75rem;
   font-weight: 600;
@@ -289,7 +280,6 @@ body {
   color: var(--color-accent-purple);
 }
 
-/* Landing: headline gradient underline (wider) */
 .headline-underline-wide {
   background: linear-gradient(90deg, rgba(139, 92, 246, 0.6), rgba(34, 211, 238, 0.4), transparent);
   height: 4px;
@@ -298,7 +288,6 @@ body {
   margin-top: 0.75rem;
 }
 
-/* Landing: subtle fade-in up for sections */
 @keyframes landing-fade-up {
   from {
     opacity: 0;
@@ -314,7 +303,6 @@ body {
   animation: landing-fade-up 0.7s ease-out forwards;
 }
 
-/* Hero v2: animated gradient mesh */
 .hero-mesh {
   background:
     radial-gradient(ellipse 80% 50% at 50% 0%, rgba(139, 92, 246, 0.2) 0%, transparent 50%),
@@ -328,7 +316,6 @@ body {
   50% { opacity: 0.85; filter: blur(1px); }
 }
 
-/* Hero v2: center orbit ring (radar style) */
 .hero-orbit-ring {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 50%;
@@ -351,7 +338,6 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* Hero v2: center dot pulse */
 .hero-center-pulse {
   animation: hero-center-pulse 3s ease-in-out infinite;
 }
