@@ -4,7 +4,7 @@ import AsteroidCard from '../components/AsteroidCard';
 import StatCard from '../components/StatCard';
 import FeaturedAsteroidCard from '../components/FeaturedAsteroidCard';
 import DashboardControls from '../components/DashboardControls';
-import { Activity, AlertTriangle, Telescope, Sparkles, Star } from 'lucide-react'; // Changed ShieldCheck to Star
+import { Activity, AlertTriangle, Telescope, Sparkles, Star, ShieldCheck } from 'lucide-react';
 
 const Dashboard = () => {
   const [asteroids, setAsteroids] = useState([]);
@@ -13,10 +13,8 @@ const Dashboard = () => {
   const [filterRisk, setFilterRisk] = useState('all');
   const [sortBy, setSortBy] = useState('risk-desc');
 
-  // FETCH FUNCTION
   const fetchData = async () => {
     try {
-      // In production, this would be your actual API endpoint
       const res = await axios.get('http://localhost:5000/api/asteroids');
       setAsteroids(res.data);
     } catch (error) {
@@ -26,15 +24,12 @@ const Dashboard = () => {
     }
   };
 
-  // INITIAL LOAD & AUTO-REFRESH (30s)
   useEffect(() => {
-    fetchData(); // Initial fetch
-    
+    fetchData(); 
     const intervalId = setInterval(() => {
-        fetchData(); // Re-fetch every 30 seconds
+        fetchData(); 
     }, 30000);
-
-    return () => clearInterval(intervalId); // Cleanup
+    return () => clearInterval(intervalId); 
   }, []);
 
   const filteredAndSortedAsteroids = useMemo(() => {
@@ -76,7 +71,7 @@ const Dashboard = () => {
   const stats = useMemo(() => {
     const total = asteroids.length;
     const hazardous = asteroids.filter(a => a.isHazardous || a.riskScore > 75).length;
-    // const safe = total - hazardous; // Removed in favor of Watchlist
+    const safe = total - hazardous;
     
     const closest = asteroids.reduce((prev, curr) => 
       (!prev.distance || curr.distance < prev.distance) ? curr : prev, asteroids[0] || {}
@@ -85,11 +80,10 @@ const Dashboard = () => {
       ((curr.riskScore ?? 0) > (prev.riskScore ?? 0)) ? curr : prev, asteroids[0] || null
     );
 
-    return { total, hazardous, closest, highestRisk };
+    return { total, hazardous, safe, closest, highestRisk };
   }, [asteroids]);
 
   if (loading) {
-    // Keep your existing loading skeleton here
     return (
       <div className="p-4 sm:p-6 space-y-6 sm:space-y-8 max-w-7xl mx-auto">
         <div className="flex flex-col items-center justify-center py-16 text-gray-500">
@@ -116,15 +110,16 @@ const Dashboard = () => {
       </div>
 
       <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-4">
-        {/* Card 1: Asteroids Today */}
+    
         <StatCard
           title="Asteroids Today"
           value={stats.total}
           subtitle="Tracked in last 24h"
           icon={Telescope}
           variant="blue"
+          trend="up" 
+          trendValue="12%"
         />
-        {/* Card 2: Potential Hazards */}
         <StatCard
           title="Potential Hazards"
           value={stats.hazardous}
@@ -133,7 +128,7 @@ const Dashboard = () => {
           variant={stats.hazardous > 0 ? 'red' : 'neutral'}
           pulse={stats.hazardous > 0}
         />
-        {/* Card 3: Closest Approach */}
+      
         <StatCard
           title="Closest Approach"
           value={`${(stats.closest?.distance / 1000000).toFixed(1)}M`}
@@ -141,7 +136,6 @@ const Dashboard = () => {
           icon={Activity}
           variant="amber"
         />
-        {/* Card 4: Watchlist (Placeholder for Phase 3 UI) */}
         <StatCard
           title="User Watchlist"
           value="0"

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Rocket, Ruler, Zap, Calendar, Gauge, ChevronDown, Star, TrendingUp, Clock } from 'lucide-react';
+import { Rocket, Ruler, Zap, Calendar, Gauge, ChevronDown, Star, Clock, Share2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 
@@ -23,6 +23,12 @@ const AsteroidCard = ({ data }) => {
     if (score > 75) return 'bg-gradient-to-r from-red-500 to-red-600';
     if (score > 50) return 'bg-gradient-to-r from-amber-500 to-amber-600';
     return 'bg-gradient-to-r from-green-500 to-green-600';
+  };
+
+  const handleShare = (e) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(`Check out asteroid ${data.name} on Cosmic Watch! Risk Score: ${data.riskScore}`);
+    alert("Asteroid details copied to clipboard!");
   };
 
   const riskScore = data.riskScore ?? 0;
@@ -81,7 +87,6 @@ const AsteroidCard = ({ data }) => {
 
       <CardContent className="pt-0 px-4 sm:px-5 pb-4 sm:pb-5">
         <div className="grid gap-3">
-          {/* Approach date - prominent block with countdown */}
           <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.06] p-3 group-hover:bg-white/[0.08] transition-colors min-w-0">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-purple/20 border border-accent-purple/30 group-hover:scale-105 transition-transform">
               <Calendar className="h-5 w-5 text-accent-purple" />
@@ -152,20 +157,29 @@ const AsteroidCard = ({ data }) => {
             <span className="font-medium">{isExpanded ? 'Show less' : 'Show more'}</span>
           </button>
 
-          <button
-            onClick={() => setIsWatchlisted(!isWatchlisted)}
-            className={`
-              flex items-center gap-2 text-xs py-2 px-3 rounded-lg
-              transition-all duration-200 font-medium
-              ${isWatchlisted 
-                ? 'bg-accent-purple/20 text-accent-purple border border-accent-purple/30' 
-                : 'text-gray-500 hover:text-accent-purple hover:bg-white/5 border border-white/10 hover:border-accent-purple/30'
-              }
-            `}
-          >
-            <Star className={`h-3.5 w-3.5 ${isWatchlisted ? 'fill-accent-purple' : ''}`} />
-            <span className="hidden sm:inline">{isWatchlisted ? 'Watching' : 'Watch'}</span>
-          </button>
+          <div className="flex items-center gap-1">
+             <button
+              onClick={handleShare}
+              className="flex items-center justify-center text-xs py-2 px-3 rounded-lg text-gray-500 hover:text-white hover:bg-white/5 border border-white/10 transition-all"
+              title="Share"
+            >
+              <Share2 className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={() => setIsWatchlisted(!isWatchlisted)}
+              className={`
+                flex items-center gap-2 text-xs py-2 px-3 rounded-lg
+                transition-all duration-200 font-medium
+                ${isWatchlisted 
+                  ? 'bg-accent-purple/20 text-accent-purple border border-accent-purple/30' 
+                  : 'text-gray-500 hover:text-accent-purple hover:bg-white/5 border border-white/10 hover:border-accent-purple/30'
+                }
+              `}
+            >
+              <Star className={`h-3.5 w-3.5 ${isWatchlisted ? 'fill-accent-purple' : ''}`} />
+              <span className="hidden sm:inline">{isWatchlisted ? 'Watching' : 'Watch'}</span>
+            </button>
+          </div>
         </div>
       </CardContent>
     </Card>
