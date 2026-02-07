@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import AsteroidCard from '../components/AsteroidCard';
 import StatCard from '../components/StatCard';
 import FeaturedAsteroidCard from '../components/FeaturedAsteroidCard';
@@ -15,7 +15,7 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/asteroids');
+      const res = await api.get('/asteroids');
       setAsteroids(res.data);
     } catch (error) {
       console.error("Error fetching data:", error);
