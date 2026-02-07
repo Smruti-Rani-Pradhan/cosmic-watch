@@ -15,11 +15,12 @@ const router = express.Router();
 router.get('/', getAsteroids);
 
 // Asteroid chat (live-chat style) – must be before /:id
-router.get('/:id/chat', (req, res) => {
+router.get('/:id/chat', async (req, res) => {
   try {
-    const messages = getMessages(req.params.id);
+    const messages = await getMessages(req.params.id);
     res.json({ messages });
   } catch (err) {
+    console.error('Chat error:', err);
     res.status(500).json({ msg: 'Failed to load messages' });
   }
 });
@@ -32,9 +33,10 @@ router.post('/:id/chat', auth, async (req, res) => {
       const u = await User.findById(req.user.id).select('username').lean();
       if (u?.username) userName = u.username;
     }
-    const msg = addMessage(req.params.id, { userId: req.user?.id, userName, text });
+    const msg = await addMessage(req.params.id, { userId: req.user?.id, userName, text });
     res.status(201).json(msg);
   } catch (err) {
+    console.error('Message error:', err);
     res.status(500).json({ msg: 'Failed to send message' });
   }
 });
