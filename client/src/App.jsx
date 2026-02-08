@@ -7,6 +7,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Watchlist from './pages/Watchlist';
 import AsteroidDetail from './pages/AsteroidDetail';
+import Profile from './pages/Profile';
+import ForgotPassword from './pages/ForgotPassword';
 import AlertSettings from './components/AlertSettings';
 
 const Alerts = () => (
@@ -24,10 +26,12 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} /> 
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} /> 
             <Route path="/dashboard" element={<div className="pt-14 sm:pt-16"><Dashboard /></div>} />
             <Route path="/watchlist" element={<div className="pt-14 sm:pt-16"><Watchlist /></div>} />
             <Route path="/asteroids/:id" element={<div className="pt-14 sm:pt-16"><AsteroidDetail /></div>} />
+            <Route path="/profile" element={<div className="pt-14 sm:pt-16"><Profile /></div>} />
             <Route path="/alerts" element={<Alerts />} />
             
           </Routes>

@@ -52,9 +52,12 @@ const Login = () => {
               Initiate Session <ArrowRight className="w-4 h-4" />
             </button>
           </form>
-          <div className="mt-6 text-center text-sm text-gray-500">
-            Need access? <Link to="/register" className="text-accent-purple hover:text-accent-purple/80">Register new terminal</Link>
+
+          <div className="flex items-center justify-between text-xs text-gray-500 mt-4">
+            <Link to="/forgot-password" className="text-accent-purple hover:underline">Forgot password?</Link>
+            <Link to="/register" className="text-accent-purple hover:underline">Need access?</Link>
           </div>
+
           <p className="mt-4 text-xs text-gray-500 text-center">
             Use the <strong>email</strong> you registered with (not username).
           </p>

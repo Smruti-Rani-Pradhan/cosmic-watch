@@ -14,11 +14,13 @@ const userSchema = new mongoose.Schema({
     name: String,
     addedAt: { type: Date, default: Date.now }
   }],
-alertPreferences: {
+  alertPreferences: {
     minRiskScore: { type: Number, default: 50 },
     notifyImminent: { type: Boolean, default: true },
     emailFrequency: { type: String, enum: ['daily', 'weekly', 'never'], default: 'daily' }
-  }
+  },
+  resetOtp: { type: String },
+  resetOtpExpiry: { type: Date }
 });
 
 export default mongoose.model('User', userSchema);

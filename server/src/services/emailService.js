@@ -50,3 +50,49 @@ export const sendRiskAlert = async (userEmail, username, asteroid) => {
     console.error('❌ Email sending failed:', error);
   }
 };
+
+// Send OTP for password reset
+export const sendOTPEmail = async (userEmail, username, otp) => {
+  const mailOptions = {
+    from: `"Perilux Security" <${process.env.EMAIL_USER}>`,
+    to: userEmail,
+    subject: `🔒 Your Password Reset Code`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #0f172a; color: white; padding: 30px; border-radius: 12px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <div style="display: inline-block; padding: 15px; background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); border-radius: 50%; margin-bottom: 15px;">
+            <span style="font-size: 40px;">🔐</span>
+          </div>
+          <h2 style="color: #a855f7; margin: 0;">Password Reset Request</h2>
+        </div>
+        
+        <p>Hello <strong>${username}</strong>,</p>
+        <p>We received a request to reset your Perilux account password. Use the code below to proceed:</p>
+        
+        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 25px; border-radius: 12px; margin: 25px 0; text-align: center; border: 2px solid #7c3aed;">
+          <p style="margin: 0 0 10px 0; font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px;">Your Reset Code</p>
+          <h1 style="margin: 0; color: #a855f7; font-size: 48px; letter-spacing: 8px; font-family: 'Courier New', monospace;">${otp}</h1>
+          <p style="margin: 10px 0 0 0; font-size: 11px; color: #64748b;">Valid for 10 minutes</p>
+        </div>
+
+        <div style="background-color: #1e293b; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b;">
+          <p style="margin: 0; font-size: 13px; color: #fbbf24;">⚠️ <strong>Security Notice:</strong></p>
+          <p style="margin: 5px 0 0 0; font-size: 12px; color: #94a3b8;">If you didn't request this, ignore this email. Your password remains unchanged.</p>
+        </div>
+
+        <p style="font-size: 11px; color: #64748b; text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #1e293b;">
+          © ${new Date().getFullYear()} Perilux · Asteroid Tracking System
+        </p>
+      </div>
+    `
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`📧 OTP email sent to ${userEmail}`);
+    return true;
+  } catch (error) {
+    console.error('❌ OTP email failed:', error);
+    return false;
+  }
+};

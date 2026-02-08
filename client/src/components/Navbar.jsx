@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Rocket, Bell, LayoutDashboard, Home, Telescope, Menu, X, LogOut } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Rocket, Bell, LayoutDashboard, Home, Telescope, Menu, X, LogOut, User } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
@@ -69,7 +70,10 @@ const Navbar = () => {
             </button>
             {user ? (
               <div className="hidden sm:flex items-center gap-2">
-                <button className="hidden sm:flex items-center gap-2 pl-1.5 pr-3.5 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 transition-all duration-200">
+                <button
+                  onClick={() => navigate('/profile')}
+                  className="hidden sm:flex items-center gap-2 pl-1.5 pr-3.5 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 transition-all duration-200"
+                >
                   <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold shadow-inner">
                     {user.username?.[0]?.toUpperCase()}
                   </div>
@@ -124,6 +128,40 @@ const Navbar = () => {
                 {item.name}
               </Link>
             ))}
+
+            {/* Mobile profile & logout */}
+            {user ? (
+              <>
+                <Link
+                  to="/profile"
+                  onClick={closeMobileMenu}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    isActive('/profile')
+                      ? 'bg-accent-purple/90 text-white'
+                      : 'text-gray-400 hover:text-white hover:bg-white/8'
+                  }`}
+                >
+                  <User size={18} />
+                  Profile
+                </Link>
+                <button
+                  onClick={() => { handleLogout(); closeMobileMenu(); }}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition-all duration-200 w-full text-left"
+                >
+                  <LogOut size={18} />
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                onClick={closeMobileMenu}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-accent-purple hover:bg-accent-purple/10 transition-all duration-200"
+              >
+                <User size={18} />
+                Login
+              </Link>
+            )}
           </div>
         </div>
       </div>
