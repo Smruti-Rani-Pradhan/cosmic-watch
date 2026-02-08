@@ -67,7 +67,7 @@ function getRoomUsers(asteroidId) {
     if (!roomUsers.has(asteroidId)) {
         roomUsers.set(asteroidId, new Set());
     }
-    return Array.from(roomUsers.get(asteroidId));
+    return Array.from(roomUsers.get(asteroidId) || []);
 }
 
 
