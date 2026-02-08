@@ -10,7 +10,11 @@ let socket = null;
 
 function getSocket() {
   if (!socket) {
-    socket = io(import.meta.env.VITE_API_URL || 'http://localhost:5000', {
+    // In production (same origin), use undefined so socket.io auto-connects to current host
+    const socketUrl = import.meta.env.PROD 
+      ? undefined 
+      : (import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000');
+    socket = io(socketUrl, {
       withCredentials: true,
       reconnection: true,
       reconnectionDelay: 1000,

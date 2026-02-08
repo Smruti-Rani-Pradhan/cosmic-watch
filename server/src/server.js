@@ -4,6 +4,9 @@ import { createServer } from 'http';
 import { Server } from 'socket.io'; 
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import { existsSync } from 'fs';
 import connectDB from './config/db.js';
 import asteroidRoutes from './routes/asteroids.js';
 import authRoutes from './routes/auth.js';
@@ -12,21 +15,20 @@ import alertRoutes from './routes/alert.js';
 import { initScheduler } from './services/alertScheduler.js';
 import { addMessage, getMessages } from './services/asteroidChatStore.js'; 
 
-dotenv.config();
+// Load .env from project root (supports both local dev and Docker)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+dotenv.config({ path: join(__dirname, '..', '.env') });
+dotenv.config(); // Also try cwd for Docker/Railway where .env may be in /app
 
 const app = express();
 const httpServer = createServer(app); 
 
-const io = new Server(httpServer, {
-    cors: {
-        origin: [process.env.CLIENT_URL || 'http://localhost:5173', 'http://localhost:5174'],
-        credentials: true
-    },
-    transports: ['websocket', 'polling']
-});
-
+// Build allowed origins from env vars (supports Railway, Docker, and local dev)
 const allowedOrigins = [
   process.env.CLIENT_URL,
+  process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : null,
+  process.env.FRONTEND_URL,
   'http://localhost',
   'http://localhost:80',
   'http://localhost:5173',
@@ -35,6 +37,14 @@ const allowedOrigins = [
   'http://127.0.0.1:80',
 ].filter(Boolean);
 if (allowedOrigins.length === 0) allowedOrigins.push('http://localhost:5173');
+
+const io = new Server(httpServer, {
+    cors: {
+        origin: allowedOrigins,
+        credentials: true
+    },
+    transports: ['websocket', 'polling']
+});
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -217,17 +227,42 @@ io.on('connection', (socket) => {
 });
 
 
-app.get('/', (req, res) => {
+// Health check / root endpoint (frontend takes over in production)
+app.get('/health', (req, res) => {
     res.status(200).json({ 
-        message: 'Cosmic Watch Backend Running', 
+        message: 'Perilux Backend Running', 
         status: 'OK' 
     });
 });
+
+// In dev mode (no static frontend), also serve JSON at root
+if (process.env.NODE_ENV !== 'production') {
+    app.get('/', (req, res) => {
+        res.status(200).json({ 
+            message: 'Perilux Backend Running', 
+            status: 'OK' 
+        });
+    });
+}
 
 app.use('/api/auth', authRoutes);
 app.use('/api/asteroids', asteroidRoutes);
 app.use('/api/watchlist', watchlistRoutes);
 app.use('/api/alerts', alertRoutes);
+
+// Serve frontend static files in production (Railway / Docker unified build)
+const publicPath = join(__dirname, '..', 'public');
+if (process.env.NODE_ENV === 'production' && existsSync(publicPath)) {
+    app.use(express.static(publicPath));
+
+    // SPA fallback: serve index.html for all non-API routes
+    app.get('*', (req, res) => {
+        if (!req.path.startsWith('/api')) {
+            res.sendFile(join(publicPath, 'index.html'));
+        }
+    });
+    console.log(`Serving static frontend from ${publicPath}`);
+}
 
 const PORT = process.env.PORT || 5000;
 

@@ -16,20 +16,33 @@ RUN pnpm install --frozen-lockfile
 # Copy source code
 COPY . .
 
+# Accept backend URL as build arg (for Railway / production)
+ARG VITE_API_URL
+ENV VITE_API_URL=${VITE_API_URL}
+
 # Build the application
 RUN pnpm build
 
 # Production stage with Nginx
 FROM nginx:alpine
 
-# Copy custom nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Remove default nginx config
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy Railway-compatible nginx template (uses $PORT)
+COPY nginx.railway.conf /etc/nginx/templates/default.conf.template
+
+# Also copy the Docker Compose nginx config as fallback
+COPY nginx.conf /etc/nginx/nginx-docker.conf
 
 # Copy built assets from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
 
+# Railway assigns PORT dynamically; default to 80 for Docker Compose
+ENV PORT=80
+
 # Expose port
 EXPOSE 80
 
-# Start nginx
+# nginx:alpine auto-substitutes env vars in /etc/nginx/templates/*.template
 CMD ["nginx", "-g", "daemon off;"]
